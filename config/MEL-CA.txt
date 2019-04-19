@@ -1,0 +1,26 @@
+no crypto pki trustpoint ienumelrti0001.mel.illallangi.enterprises
+yes
+no crypto pki server ienumelrti0001.mel.illallangi.enterprises
+yes
+
+crypto key generate rsa label ienumelrti0001.mel.illallangi.enterprises modulus 4096 exportable
+
+crypto pki trustpoint ienumelrti0001.mel.illallangi.enterprises
+ revocation-check crl none
+ rsakeypair ienumelrti0001.mel.illallangi.enterprises
+!
+
+crypto pki server ienumelrti0001.mel.illallangi.enterprises
+ hash sha1
+ database url flash:
+ database level complete
+ database archive pkcs12 password Letmein1234
+ grant auto rollover ca-cert
+ grant auto
+ lifetime certificate 730
+ lifetime ca-certificate 750
+ auto-rollover 90
+ no shut
+!
+
+crypto pki enroll ienumelrti0001.mel.illallangi.enterprises

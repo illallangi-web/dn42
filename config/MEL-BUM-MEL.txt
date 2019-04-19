@@ -1,0 +1,61 @@
+no ip route 172.20.129.180 255.255.255.255 tunnel 1
+no interface tunnel 1
+no crypto ipsec profile BUM_MEL
+no crypto ipsec transform-set BUM_MEL
+no crypto ikev2 profile BUM_MEL
+no crypto ikev2 policy BUM_MEL
+no crypto ikev2 proposal BUM_MEL
+
+! Define IKEv2 Proposal
+crypto ikev2 proposal BUM_MEL
+ encryption aes-cbc-256
+ integrity sha256
+ group 14
+
+! Define IKEv2 Policy
+crypto ikev2 policy BUM_MEL
+ proposal BUM_MEL
+
+! Define IKEv2 Profile
+crypto ikev2 profile BUM_MEL
+ match identity remote address 139.99.194.24 255.255.255.255
+ 
+ 
+ identity local address 59.167.193.8
+ authentication remote rsa-sig
+ authentication local rsa-sig
+ pki trustpoint ienumelrti0001.mel.illallangi.enterprises
+
+! Define Transform Set
+crypto ipsec transform-set BUM_MEL esp-aes 256 esp-sha256-hmac
+ mode tunnel
+ 
+! Define IPSEC Profile
+crypto ipsec profile BUM_MEL
+ set transform-set BUM_MEL
+ set ikev2-profile BUM_MEL
+
+interface tunnel 1
+ description DN42 Tunnel to dn42-au-syd1.burble.com
+ ip unnumbered Loopback0
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ ip mtu 1236
+ ip nat inside
+ ip virtual-reassembly in
+ ip tcp adjust-mss 1236
+ qos pre-classify
+ tunnel source Dialer0
+ tunnel destination 139.99.194.24
+ tunnel protection ipsec profile BUM_MEL shared
+
+ip route 172.20.129.180 255.255.255.255 tunnel 1
+
+
+
+
+ 
+ 
+ 
+no crypto ikev2 http-url cert

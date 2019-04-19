@@ -1,0 +1,57 @@
+no crypto pki trustpoint ienuwfsrti0001.wfs.illallangi.enterprises
+yes
+no crypto pki server ca
+yes
+
+crypto key generate rsa label ienuwfsrti0001.wfs.illallangi.enterprises modulus 2048 exportable
+crypto key generate rsa label ca modulus 2048 exportable
+
+crypto pki server ca
+ database url flash:
+ issuer-name cn=ienuwfsrti0001.wfs.illallangi.enterprises
+ hash sha1
+ database level complete
+ database archive pkcs12 password Letmein1234
+ grant auto rollover ca-cert
+ grant auto
+ lifetime certificate 730
+ lifetime ca-certificate 750
+ auto-rollover 90
+ no shut
+!
+
+crypto pki trustpoint ienustarti0001.sta.illallangi.enterprises
+ revocation-check crl none
+ rsakeypair ienuwfsrti0001.wfs.illallangi.enterprises
+ enrollment url http://ienustarti0001.sta.illallangi.enterprises
+!
+
+crypto pki authenticate ienustarti0001.sta.illallangi.enterprises
+yes
+crypto pki enroll ienustarti0001.sta.illallangi.enterprises
+
+
+no
+yes
+Loopback2
+yes
+end
+sh cry pki certificates verbose ienuwfsrti0001.wfs.illallangi.enterprises
+
+
+
+
+
+
+
+! SELF SIGNED
+crypto key zeroize rsa
+yes
+
+crypto key generate rsa label ienuwfsrti0001.wfs.illallangi.enterprises modulus 2048 exportable
+crypto pki trustpoint ienuwfsrti0001.wfs.illallangi.enterprises
+ enrollment selfsigned
+ subject-name CN=ienuwfsrti0001.wfs.illallangi.enterprises
+ rsakeypair ienuwfsrti0001.wfs.illallangi.enterprises
+
+crypto pki enroll ienuwfsrti0001.wfs.illallangi.enterprises

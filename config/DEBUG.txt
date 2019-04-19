@@ -1,0 +1,50 @@
+no debug crypto ipsec
+no debug crypto ikev2
+term no mon
+
+debug crypto ipsec
+debug crypto ikev2
+term mon
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

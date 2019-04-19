@@ -1,0 +1,61 @@
+
+no interface tunnel 0
+no crypto ipsec profile IEN_VPN
+no crypto ipsec transform-set IEN_VPN
+no crypto ikev2 profile IEN_VPN
+no crypto ikev2 policy IEN_VPN
+no crypto ikev2 proposal IEN_VPN
+
+! Define IKEv2 Proposal
+crypto ikev2 proposal IEN_VPN
+ encryption aes-cbc-256
+ integrity sha256
+ group 24
+
+! Define IKEv2 Policy
+crypto ikev2 policy IEN_VPN
+ proposal IEN_VPN
+
+! Define IKEv2 Profile
+crypto ikev2 profile IEN_VPN
+ match identity remote address 59.167.193.8 255.255.255.255
+ match identity remote address 150.101.220.176 255.255.255.255
+ match identity remote address 150.101.220.177 255.255.255.255
+ identity local address 59.167.193.8
+ authentication remote rsa-sig
+ authentication local rsa-sig
+ pki trustpoint ienumelrti0001.mel.illallangi.enterprises
+
+! Define Transform Set
+crypto ipsec transform-set IEN_VPN esp-aes esp-sha256-hmac
+ mode tunnel
+ 
+! Define IPSEC Profile
+crypto ipsec profile IEN_VPN
+ set transform-set IEN_VPN
+ set ikev2-profile IEN_VPN
+ 
+interface tunnel 0
+ description IEN Tunnel
+ ip address 172.25.63.225 255.255.255.240
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ ip mtu 1236
+ ip nat inside
+ ip virtual-reassembly in
+ ip tcp adjust-mss 1236
+ qos pre-classify
+ tunnel source Dialer0
+
+ tunnel protection ipsec profile IEN_VPN shared
+ tunnel mode gre multipoint
+
+ ip ospf network broadcast
+ ip ospf 1024 area 0
+
+ ip nhrp authentication b7cfdc9c
+ 
+ ip nhrp map multicast dynamic
+ ip nhrp network-id 10
+ ip nhrp holdtime 600

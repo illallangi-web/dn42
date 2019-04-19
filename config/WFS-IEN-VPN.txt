@@ -1,0 +1,43 @@
+
+no interface tunnel 0
+no crypto ipsec profile IEN_VPN
+no crypto ipsec transform-set IEN_VPN
+no crypto ikev2 profile IEN_VPN
+no crypto ikev2 policy IEN_VPN
+no crypto ikev2 proposal IEN_VPN
+
+no crypto ikev2 http-url cert
+
+! Define IKEv2 Proposal
+crypto ikev2 proposal IEN_VPN
+ encryption aes-cbc-256
+ integrity sha256
+ group 24
+
+! Define IKEv2 Policy
+crypto ikev2 policy IEN_VPN
+ proposal IEN_VPN
+
+! Define IKEv2 Profile
+crypto ikev2 profile IEN_VPN
+ match identity remote address 150.101.220.176 255.255.255.255
+ identity local address 150.101.220.177
+ authentication remote rsa-sig
+ authentication local rsa-sig
+ pki trustpoint ienustarti0001.sta.illallangi.enterprises
+
+! Define Transform Set
+crypto ipsec transform-set IEN_VPN esp-aes 256 esp-sha256-hmac
+ mode tunnel
+ 
+! Define IPSEC Profile
+crypto ipsec profile IEN_VPN
+ set transform-set IEN_VPN
+ set ikev2-profile IEN_VPN
+
+interface tunnel 0
+ description IEN Tunnel
+ ip address 172.25.63.227 255.255.255.240
+ tunnel source Loopback2
+ tunnel destination 150.101.220.176
+ tunnel protection ipsec profile IEN_VPN shared
