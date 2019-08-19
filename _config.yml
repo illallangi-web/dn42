@@ -1,7 +1,11 @@
-title: illallangi.dn42
+title: Illallangi Enterprises PKI
 owner: Andrew Cole
 email: andrew.cole@illallangi.com
 description: >-
-  Experimental Networking
+  Security is Everyone's Responsibility
+baseurl: ""
+url: "https://illallangi.enterprises"
+twitter_username: "illallangi"
+github_username:  "illallangi"
 color1: "#5C258D"
 color2: "#4389A2"
