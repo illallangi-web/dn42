@@ -2,8 +2,6 @@
 layout: default
 ---
 
-# Experimental Networking
-
 Email [andrew.cole@illallangi.com][1] to discuss peering.
 
 ## lon.illallangi.enterprises
